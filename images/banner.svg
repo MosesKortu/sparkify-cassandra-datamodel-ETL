@@ -1,0 +1,75 @@
+<svg viewBox="0 0 1600 460" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#10121C"/>
+      <stop offset="100%" stop-color="#171A2A"/>
+    </linearGradient>
+    <radialGradient id="ringGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F2B84B" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#F2B84B" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="amberStroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F7CB6E"/>
+      <stop offset="100%" stop-color="#C98F2E"/>
+    </linearGradient>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="460" fill="url(#bg)"/>
+
+  <!-- faint grid -->
+  <g stroke="#232838" stroke-width="1">
+    <path d="M0 76 H1600 M0 152 H1600 M0 228 H1600 M0 304 H1600 M0 380 H1600" opacity="0.5"/>
+    <path d="M120 0 V460 M320 0 V460 M520 0 V460 M720 0 V460 M920 0 V460 M1120 0 V460 M1320 0 V460 M1520 0 V460" opacity="0.25"/>
+  </g>
+
+  <!-- consistent-hashing ring, right side -->
+  <g transform="translate(1230,230)">
+    <circle r="150" fill="url(#ringGlow)"/>
+    <circle r="150" fill="none" stroke="#2C3244" stroke-width="2"/>
+    <circle r="150" fill="none" stroke="url(#amberStroke)" stroke-width="3"
+            stroke-dasharray="94 848" stroke-dashoffset="-40" stroke-linecap="round"/>
+
+    <!-- token nodes around the ring -->
+    <g>
+      <circle cx="0" cy="-150" r="7" fill="#3FC6C9"/>
+      <circle cx="106.1" cy="-106.1" r="9" fill="#F2B84B"/>
+      <circle cx="150" cy="0" r="7" fill="#3FC6C9"/>
+      <circle cx="106.1" cy="106.1" r="7" fill="#3FC6C9"/>
+      <circle cx="0" cy="150" r="9" fill="#F2B84B"/>
+      <circle cx="-106.1" cy="106.1" r="7" fill="#3FC6C9"/>
+      <circle cx="-150" cy="0" r="7" fill="#3FC6C9"/>
+      <circle cx="-106.1" cy="-106.1" r="7" fill="#3FC6C9"/>
+    </g>
+    <circle r="3.5" fill="#ECE9E2"/>
+    <text x="0" y="184" text-anchor="middle" font-size="12" letter-spacing="2" fill="#8890A4">CONSISTENT-HASH RING</text>
+  </g>
+
+  <!-- headline -->
+  <g font-family="'Space Grotesk','Segoe UI',sans-serif">
+    <text x="100" y="150" font-size="20" letter-spacing="6" fill="#F2B84B">SPARKIFY</text>
+    <text x="100" y="210" font-size="46" font-weight="700" fill="#ECE9E2">Data Modeling with</text>
+    <text x="100" y="264" font-size="46" font-weight="700" fill="#ECE9E2">Apache Cassandra</text>
+  </g>
+
+  <text x="102" y="308" font-size="16" fill="#8890A4">Query-first NoSQL schema design for a music-streaming event pipeline</text>
+
+  <!-- tags -->
+  <g font-size="13" fill="#171A2A">
+    <rect x="100" y="336" width="88" height="30" rx="15" fill="#3FC6C9"/>
+    <text x="118" y="356">Python 3</text>
+
+    <rect x="198" y="336" width="150" height="30" rx="15" fill="#F2B84B"/>
+    <text x="216" y="356">Apache Cassandra</text>
+
+    <rect x="358" y="336" width="70" height="30" rx="15" fill="#EAE7DF"/>
+    <text x="376" y="356">CQL</text>
+
+    <rect x="438" y="336" width="108" height="30" rx="15" fill="#2C3244"/>
+    <text x="456" y="356" fill="#ECE9E2">ETL Pipeline</text>
+  </g>
+
+  <text x="100" y="410" font-size="12.5" letter-spacing="1" fill="#525A70">3 denormalized tables · 1 query each · zero JOINs</text>
+</svg>

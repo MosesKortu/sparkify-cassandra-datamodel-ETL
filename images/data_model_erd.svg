@@ -1,0 +1,73 @@
+<svg viewBox="0 0 1600 620" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F1119"/>
+      <stop offset="100%" stop-color="#171A2A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="620" fill="url(#bg3)"/>
+  <text x="60" y="54" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="26" font-weight="700" fill="#ECE9E2">Table Schemas</text>
+  <text x="60" y="80" font-size="13" fill="#8890A4">Each table is denormalized and owned by exactly one query — amber rows form the partition key, teal rows the clustering key</text>
+
+  <!-- legend -->
+  <g transform="translate(1180,26)">
+    <rect width="14" height="14" rx="3" fill="#F2B84B"/>
+    <text x="22" y="12" font-size="12" fill="#8890A4">Partition key</text>
+    <rect x="150" width="14" height="14" rx="3" fill="#3FC6C9"/>
+    <text x="172" y="12" font-size="12" fill="#8890A4">Clustering key</text>
+  </g>
+
+  <!-- TABLE 1 -->
+  <g transform="translate(60,120)">
+    <text font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="17" fill="#ECE9E2">songs_details_by_session</text>
+    <rect y="16" width="440" height="34" fill="#1B1F2E" stroke="#F2B84B" stroke-width="1.3"/>
+    <text x="14" y="38" font-size="12.5" fill="#F2B84B">session_id</text><text x="220" y="38" font-size="12" fill="#8890A4">int</text><text x="330" y="38" font-size="11" fill="#525A70">partition key</text>
+    <rect y="50" width="440" height="34" fill="#171B26" stroke="#3FC6C9" stroke-width="1.3"/>
+    <text x="14" y="72" font-size="12.5" fill="#3FC6C9">itemInSession</text><text x="220" y="72" font-size="12" fill="#8890A4">int</text><text x="330" y="72" font-size="11" fill="#525A70">clustering key</text>
+    <rect y="84" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="104" font-size="12.5" fill="#ECE9E2">artist</text><text x="220" y="104" font-size="12" fill="#8890A4">text</text>
+    <rect y="114" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="134" font-size="12.5" fill="#ECE9E2">song</text><text x="220" y="134" font-size="12" fill="#8890A4">text</text>
+    <rect y="144" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="164" font-size="12.5" fill="#ECE9E2">length</text><text x="220" y="164" font-size="12" fill="#8890A4">float</text>
+    <text y="200" font-size="11.5" fill="#525A70">Answers — artist, song &amp; length for a given session + item index</text>
+  </g>
+
+  <!-- TABLE 2 -->
+  <g transform="translate(580,120)">
+    <text font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="17" fill="#ECE9E2">user_history_by_session</text>
+    <rect y="16" width="440" height="34" fill="#1B1F2E" stroke="#F2B84B" stroke-width="1.3"/>
+    <text x="14" y="38" font-size="12.5" fill="#F2B84B">user_id</text><text x="220" y="38" font-size="12" fill="#8890A4">int</text><text x="330" y="38" font-size="11" fill="#525A70">partition key (1/2)</text>
+    <rect y="50" width="440" height="34" fill="#1B1F2E" stroke="#F2B84B" stroke-width="1.3"/>
+    <text x="14" y="72" font-size="12.5" fill="#F2B84B">session_id</text><text x="220" y="72" font-size="12" fill="#8890A4">int</text><text x="330" y="72" font-size="11" fill="#525A70">partition key (2/2)</text>
+    <rect y="84" width="440" height="34" fill="#171B26" stroke="#3FC6C9" stroke-width="1.3"/>
+    <text x="14" y="106" font-size="12.5" fill="#3FC6C9">item_in_session</text><text x="220" y="106" font-size="12" fill="#8890A4">int</text><text x="330" y="106" font-size="11" fill="#525A70">clustering key</text>
+    <rect y="118" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="138" font-size="12.5" fill="#ECE9E2">artist</text><text x="220" y="138" font-size="12" fill="#8890A4">text</text>
+    <rect y="148" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="168" font-size="12.5" fill="#ECE9E2">song</text><text x="220" y="168" font-size="12" fill="#8890A4">text</text>
+    <rect y="178" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="198" font-size="12.5" fill="#ECE9E2">first_name / last_name</text><text x="220" y="198" font-size="12" fill="#8890A4">text</text>
+    <text y="230" font-size="11.5" fill="#525A70">Answers — one user's session history, sorted by item_in_session</text>
+  </g>
+
+  <!-- TABLE 3 -->
+  <g transform="translate(1100,120)">
+    <text font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="17" fill="#ECE9E2">users_by_song</text>
+    <rect y="16" width="440" height="34" fill="#1B1F2E" stroke="#F2B84B" stroke-width="1.3"/>
+    <text x="14" y="38" font-size="12.5" fill="#F2B84B">song</text><text x="220" y="38" font-size="12" fill="#8890A4">text</text><text x="330" y="38" font-size="11" fill="#525A70">partition key</text>
+    <rect y="50" width="440" height="34" fill="#171B26" stroke="#3FC6C9" stroke-width="1.3"/>
+    <text x="14" y="72" font-size="12.5" fill="#3FC6C9">user_id</text><text x="220" y="72" font-size="12" fill="#8890A4">int</text><text x="330" y="72" font-size="11" fill="#525A70">clustering key</text>
+    <rect y="84" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="104" font-size="12.5" fill="#ECE9E2">first_name</text><text x="220" y="104" font-size="12" fill="#8890A4">text</text>
+    <rect y="114" width="440" height="30" fill="#141722" stroke="#2C3244" stroke-width="1"/>
+    <text x="14" y="134" font-size="12.5" fill="#ECE9E2">last_name</text><text x="220" y="134" font-size="12" fill="#8890A4">text</text>
+    <text y="170" font-size="11.5" fill="#525A70">Answers — every unique listener of a given song</text>
+    <text y="188" font-size="11" fill="#525A70">(clustering key guarantees uniqueness, avoids overwrites)</text>
+  </g>
+
+  <text x="60" y="470" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="15" fill="#ECE9E2">Design principle</text>
+  <text x="60" y="496" font-size="12.5" fill="#8890A4">Cassandra has no JOINs and no ad-hoc WHERE clauses on non-key columns.</text>
+  <text x="60" y="518" font-size="12.5" fill="#8890A4">Every table above is shaped by its query, not by entity normalization —</text>
+  <text x="60" y="540" font-size="12.5" fill="#8890A4">the same event data is deliberately duplicated across all three tables.</text>
+</svg>

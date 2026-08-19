@@ -1,0 +1,132 @@
+<svg viewBox="0 0 1600 760" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono','Fira Code',monospace">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0F1119"/>
+      <stop offset="100%" stop-color="#171A2A"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#525A70"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#F2B84B"/>
+    </marker>
+    <filter id="glow2"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <rect width="1600" height="760" fill="url(#bg2)"/>
+  <text x="60" y="56" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="26" font-weight="700" fill="#ECE9E2">Pipeline Architecture</text>
+  <text x="60" y="82" font-size="13" fill="#8890A4">Raw partitioned logs → denormalized CSV → three query-optimized Cassandra tables</text>
+
+  <!-- Stage 1: raw logs -->
+  <g transform="translate(60,140)">
+    <rect width="300" height="150" rx="14" fill="#171B26" stroke="#2C3244" stroke-width="1.5"/>
+    <text x="24" y="34" font-size="13" letter-spacing="2" fill="#3FC6C9">01 · SOURCE</text>
+    <text x="24" y="64" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="18" fill="#ECE9E2">event_data/</text>
+    <text x="24" y="90" font-size="12.5" fill="#8890A4">Daily partitioned CSV logs</text>
+    <text x="24" y="110" font-size="12.5" fill="#8890A4">of user listening activity</text>
+    <g fill="#2C3244">
+      <rect x="24" y="122" width="60" height="14" rx="3"/>
+      <rect x="90" y="122" width="60" height="14" rx="3"/>
+      <rect x="156" y="122" width="60" height="14" rx="3"/>
+    </g>
+  </g>
+
+  <!-- Stage 2: ETL -->
+  <g transform="translate(440,140)">
+    <rect width="300" height="150" rx="14" fill="#171B26" stroke="#2C3244" stroke-width="1.5"/>
+    <text x="24" y="34" font-size="13" letter-spacing="2" fill="#3FC6C9">02 · ETL</text>
+    <text x="24" y="64" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="18" fill="#ECE9E2">Python consolidation</text>
+    <text x="24" y="90" font-size="12.5" fill="#8890A4">glob + csv walk, drop null-</text>
+    <text x="24" y="108" font-size="12.5" fill="#8890A4">artist rows, flatten to one file</text>
+    <text x="24" y="132" font-size="12" fill="#525A70">pandas · glob · csv · os</text>
+  </g>
+
+  <!-- Stage 3: denormalized csv -->
+  <g transform="translate(820,140)">
+    <rect width="300" height="150" rx="14" fill="#1B1F2E" stroke="#F2B84B" stroke-width="1.5"/>
+    <text x="24" y="34" font-size="13" letter-spacing="2" fill="#F2B84B">03 · OUTPUT</text>
+    <text x="24" y="64" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="18" fill="#ECE9E2">event_datafile_new.csv</text>
+    <text x="24" y="90" font-size="12.5" fill="#8890A4">6,820 denormalized rows</text>
+    <text x="24" y="108" font-size="12.5" fill="#8890A4">11 columns, analytics-ready</text>
+    <text x="24" y="132" font-size="12" fill="#525A70">artist · song · userId · sessionId …</text>
+  </g>
+
+  <!-- Stage 4: cassandra ring -->
+  <g transform="translate(1200,110)">
+    <text x="0" y="20" font-size="13" letter-spacing="2" fill="#3FC6C9">04 · KEYSPACE</text>
+    <text x="0" y="50" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="18" fill="#ECE9E2">sparkify</text>
+    <g transform="translate(150,120)">
+      <circle r="95" fill="none" stroke="#2C3244" stroke-width="2"/>
+      <circle r="95" fill="none" stroke="#F2B84B" stroke-width="3" stroke-dasharray="60 537" stroke-linecap="round"/>
+      <circle cx="0" cy="-95" r="6" fill="#3FC6C9"/>
+      <circle cx="82" cy="-47" r="6" fill="#3FC6C9"/>
+      <circle cx="82" cy="47" r="6" fill="#3FC6C9"/>
+      <circle cx="0" cy="95" r="6" fill="#3FC6C9"/>
+      <circle cx="-82" cy="47" r="6" fill="#3FC6C9"/>
+      <circle cx="-82" cy="-47" r="6" fill="#3FC6C9"/>
+      <circle r="3" fill="#ECE9E2"/>
+    </g>
+    <text x="150" y="250" text-anchor="middle" font-size="11.5" fill="#525A70">SimpleStrategy · RF 1 (local)</text>
+  </g>
+
+  <!-- connecting arrows stage1-2-3 -->
+  <path d="M360 215 H436" stroke="#525A70" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M740 215 H816" stroke="#525A70" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M1120 215 C1160 215 1160 230 1200 230" stroke="#F2B84B" stroke-width="2" marker-end="url(#arrowAmber)" fill="none"/>
+
+  <!-- fan-out to 3 tables -->
+  <text x="60" y="380" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="18" fill="#ECE9E2">Query-first table design</text>
+  <text x="60" y="402" font-size="12.5" fill="#8890A4">One denormalized table per access pattern — no JOINs, no secondary indexes</text>
+
+  <path d="M970 290 V 440 M970 440 H 260 M970 440 H 660 M970 440 H 1060" stroke="#2C3244" stroke-width="1.5" fill="none"/>
+  <path d="M260 440 V 460" stroke="#2C3244" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M660 440 V 460" stroke="#2C3244" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M1060 440 V 460" stroke="#2C3244" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- table card 1 -->
+  <g transform="translate(90,470)">
+    <rect width="340" height="220" rx="14" fill="#171B26" stroke="#2C3244" stroke-width="1.5"/>
+    <rect x="0" y="0" width="340" height="6" rx="3" fill="#3FC6C9"/>
+    <text x="22" y="40" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="16" fill="#ECE9E2">songs_details_by_session</text>
+    <text x="22" y="64" font-size="12" fill="#8890A4">Q1 · artist / song / length for a</text>
+    <text x="22" y="80" font-size="12" fill="#8890A4">specific session + item index</text>
+    <line x1="22" y1="96" x2="318" y2="96" stroke="#2C3244"/>
+    <text x="22" y="120" font-size="12.5" fill="#F2B84B">PK  session_id</text>
+    <text x="22" y="140" font-size="12.5" fill="#3FC6C9">CK  item_in_session</text>
+    <text x="22" y="168" font-size="11.5" fill="#525A70">artist · song · length</text>
+    <rect x="22" y="184" width="296" height="24" rx="6" fill="#1B1F2E"/>
+    <text x="34" y="200" font-size="11" fill="#8890A4">WHERE session_id=338 AND item=4</text>
+  </g>
+
+  <!-- table card 2 -->
+  <g transform="translate(490,470)">
+    <rect width="340" height="220" rx="14" fill="#171B26" stroke="#2C3244" stroke-width="1.5"/>
+    <rect x="0" y="0" width="340" height="6" rx="3" fill="#3FC6C9"/>
+    <text x="22" y="40" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="16" fill="#ECE9E2">user_history_by_session</text>
+    <text x="22" y="64" font-size="12" fill="#8890A4">Q2 · a user's song history for</text>
+    <text x="22" y="80" font-size="12" fill="#8890A4">one session, ordered by item</text>
+    <line x1="22" y1="96" x2="318" y2="96" stroke="#2C3244"/>
+    <text x="22" y="120" font-size="12.5" fill="#F2B84B">PK  (user_id, session_id)</text>
+    <text x="22" y="140" font-size="12.5" fill="#3FC6C9">CK  item_in_session</text>
+    <text x="22" y="168" font-size="11.5" fill="#525A70">artist · song · first/last name</text>
+    <rect x="22" y="184" width="296" height="24" rx="6" fill="#1B1F2E"/>
+    <text x="34" y="200" font-size="11" fill="#8890A4">WHERE user_id=10 AND session_id=182</text>
+  </g>
+
+  <!-- table card 3 -->
+  <g transform="translate(890,470)">
+    <rect width="340" height="220" rx="14" fill="#171B26" stroke="#2C3244" stroke-width="1.5"/>
+    <rect x="0" y="0" width="340" height="6" rx="3" fill="#3FC6C9"/>
+    <text x="22" y="40" font-family="'Space Grotesk','Segoe UI',sans-serif" font-size="16" fill="#ECE9E2">users_by_song</text>
+    <text x="22" y="64" font-size="12" fill="#8890A4">Q3 · every unique listener</text>
+    <text x="22" y="80" font-size="12" fill="#8890A4">of a given song</text>
+    <line x1="22" y1="96" x2="318" y2="96" stroke="#2C3244"/>
+    <text x="22" y="120" font-size="12.5" fill="#F2B84B">PK  song</text>
+    <text x="22" y="140" font-size="12.5" fill="#3FC6C9">CK  user_id</text>
+    <text x="22" y="168" font-size="11.5" fill="#525A70">first_name · last_name</text>
+    <rect x="22" y="184" width="296" height="24" rx="6" fill="#1B1F2E"/>
+    <text x="34" y="200" font-size="11" fill="#8890A4">WHERE song='All Hands Against His Own'</text>
+  </g>
+
+  <text x="1260" y="726" text-anchor="end" font-size="11" fill="#525A70">PK = partition key · CK = clustering key</text>
+</svg>
