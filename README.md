@@ -53,12 +53,12 @@ In this project the same event data is intentionally copied into three tables. T
 flowchart LR
     A["event_data/\ndaily partitioned CSVs"] -->|Python ETL\npandas · glob · csv| B["event_datafile_new.csv\n6,820 denormalized rows"]
     B --> C{{"sparkify keyspace"}}
-    C --> D["songs_details_by_session"]
-    C --> E["user_history_by_session"]
+    C --> D["song_details_by_session"]
+    C --> E["song_playlist_by_user_session"]
     C --> F["users_by_song"]
 ```
 
-**Preprocessing.** The notebook walks `event_data/`, reads every partitioned CSV, drops rows with a missing artist, and writes a single flat file — `event_datafile_new.csv` — with 11 columns: `artist, firstName, gender, itemInSession, lastName, length, level, location, sessionId, song, userId`.
+**Preprocessing.** The notebook walks `event_data/`, reads every partitioned CSV, drops rows with a missing artist, and writes a single flat file — `event_datafile_new.csv` — with 11 columns: `artist, firstName, gender, item_in_session, lastName, length, level, location, sessionId, song, userId`.
 
 ## Data model
 
@@ -66,8 +66,8 @@ flowchart LR
 
 | # | Business question | Table | Primary key | Key rationale |
 |---|---|---|---|---|
-| 1 | Artist, song title, and length heard during `sessionId = 338`, `itemInSession = 4` | `songs_details_by_session` | `((session_id), itemInSession)` | `session_id` partitions rows across the ring; `itemInSession` clusters and sorts within a session. |
-| 2 | Artist, song (sorted by item), and listener name for `userId = 10`, `sessionId = 182` | `user_history_by_session` | `((user_id, session_id), item_in_session)` | Composite partition key spreads load evenly; clustering key preserves listening order. |
+| 1 | Artist, song title, and length heard during `sessionId = 338`, `item_in_session = 4` | `song_details_by_session` | `((session_id), item_in_session)` | `session_id` partitions rows across the ring; `item_in_session` clusters and sorts within a session. |
+| 2 | Artist, song (sorted by item), and listener name for `userId = 10`, `sessionId = 182` | `song_playlist_by_user_session` | `((user_id, session_id), item_in_session)` | Composite partition key spreads load evenly; clustering key preserves listening order. |
 | 3 | Every listener (first/last name) of *"All Hands Against His Own"* | `users_by_song` | `((song), user_id)` | `song` partitions by track; `user_id` as a clustering key keeps every listener instead of overwriting one row per song. |
 
 ## Repository structure
@@ -117,8 +117,8 @@ Run the notebook top to bottom: it consolidates `event_data/` into `event_datafi
 <summary><strong>Query 1</strong> — artist, song, length for a session + item index</summary>
 
 ```sql
-SELECT artist, song, length FROM songs_details_by_session
-WHERE session_id = 338 AND itemInSession = 4;
+SELECT artist, song, length FROM song_details_by_session
+WHERE session_id = 338 AND item_in_session = 4;
 ```
 
 | artist | song | length |
@@ -131,7 +131,7 @@ WHERE session_id = 338 AND itemInSession = 4;
 <summary><strong>Query 2</strong> — a user's session history, ordered by item</summary>
 
 ```sql
-SELECT artist, song, first_name, last_name FROM user_history_by_session
+SELECT artist, song, first_name, last_name FROM song_playlist_by_user_session
 WHERE user_id = 10 AND session_id = 182;
 ```
 
@@ -174,5 +174,5 @@ Released under the [MIT License](LICENSE).
 ---
 
 <div align="center">
-<sub>Built by Moses (MP) Bargue Kortu Jr.</sub>
+<sub>Built by Moses Bargue Kortu Jr.</sub>
 </div>
